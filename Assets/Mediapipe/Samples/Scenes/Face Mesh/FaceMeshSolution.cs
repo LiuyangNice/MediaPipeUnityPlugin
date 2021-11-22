@@ -143,10 +143,18 @@ namespace Mediapipe.Unity.FaceMesh
     {
       _faceDetectionsAnnotationController.DrawLater(faceDetections);
     }
-
+    public Test test;
     private void OnMultiFaceLandmarksOutput(List<NormalizedLandmarkList> multiFaceLandmarks)
     {
       _multiFaceLandmarksAnnotationController.DrawLater(multiFaceLandmarks);
+      if (multiFaceLandmarks != null)
+      {
+        test.multiFaceLandmarks = multiFaceLandmarks;
+        //Debug.Log(multiFaceLandmarks[0]);
+      }else
+      {
+        test.multiFaceLandmarks = null;
+      }
     }
 
     private void OnFaceRectsFromLandmarksOutput(List<NormalizedRect> faceRectsFromLandmarks)

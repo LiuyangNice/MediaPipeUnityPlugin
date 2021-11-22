@@ -1,0 +1,34 @@
+{
+  "build": "hb210afc_5",
+  "build_number": 5,
+  "channel": "https://conda.anaconda.org/conda-forge/win-64",
+  "constrains": [],
+  "depends": [
+    "vs2015_runtime >=14.28.29325"
+  ],
+  "extracted_package_dir": "F:\\Miniconda3\\pkgs\\vc-14.2-hb210afc_5",
+  "features": "",
+  "files": [],
+  "fn": "vc-14.2-hb210afc_5.tar.bz2",
+  "license": "BSD-3-Clause",
+  "license_family": "BSD",
+  "link": {
+    "source": "F:\\Miniconda3\\pkgs\\vc-14.2-hb210afc_5",
+    "type": 1
+  },
+  "md5": "ee42529d57c3b455d9fec61e912aa2a6",
+  "name": "vc",
+  "package_tarball_full_path": "F:\\Miniconda3\\pkgs\\vc-14.2-hb210afc_5.tar.bz2",
+  "paths_data": {
+    "paths": [],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "7fb893fe02a3605910b5bf97296d1b8a3e5372a09cd3189f8a534c85b8b437a0",
+  "size": 13244,
+  "subdir": "win-64",
+  "timestamp": 1624484173187,
+  "track_features": "vc14",
+  "url": "https://conda.anaconda.org/conda-forge/win-64/vc-14.2-hb210afc_5.tar.bz2",
+  "version": "14.2"
+}
