@@ -5,7 +5,7 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.Optimization;
 using Mediapipe;
-
+using Newtonsoft.Json;
 public class Test : MonoBehaviour
 {
   public Camera camera;
@@ -39,8 +39,10 @@ public class Test : MonoBehaviour
   }
   private void Update()
   {
+    Debug.Log("asdas");
     if (multiFaceLandmarks != null)
     {
+
       GetRt(multiFaceLandmarks);
     }
   }
