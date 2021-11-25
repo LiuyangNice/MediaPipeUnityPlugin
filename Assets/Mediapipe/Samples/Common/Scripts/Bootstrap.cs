@@ -7,8 +7,8 @@
 using System.Collections;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Mediapipe.Unity
 {
@@ -113,7 +113,8 @@ namespace Mediapipe.Unity
     private void DecideInferenceMode()
     {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_WIN
-      if (_preferableInferenceMode == InferenceMode.GPU) {
+      if (_preferableInferenceMode == InferenceMode.GPU)
+      {
         Logger.LogWarning(_TAG, "Current platform does not support GPU inference mode, so falling back to CPU mode");
       }
       inferenceMode = InferenceMode.CPU;

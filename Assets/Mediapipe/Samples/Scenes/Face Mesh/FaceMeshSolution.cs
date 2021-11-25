@@ -130,9 +130,9 @@ namespace Mediapipe.Unity.FaceMesh
         {
           // When running synchronously, wait for the outputs here (blocks the main thread).
           var value = _graphRunner.FetchNextValue();
-          _faceDetectionsAnnotationController.DrawNow(value.faceDetections);
-          _faceRectsFromLandmarksAnnotationController.DrawNow(value.faceRectsFromLandmarks);
-          _multiFaceLandmarksAnnotationController.DrawNow(value.multiFaceLandmarks);
+          //_faceDetectionsAnnotationController.DrawNow(value.faceDetections);
+          //_faceRectsFromLandmarksAnnotationController.DrawNow(value.faceRectsFromLandmarks);
+          //_multiFaceLandmarksAnnotationController.DrawNow(value.multiFaceLandmarks);
         }
 
         yield return new WaitForEndOfFrame();
@@ -141,25 +141,41 @@ namespace Mediapipe.Unity.FaceMesh
 
     private void OnFaceDetectionsOutput(List<Detection> faceDetections)
     {
-      _faceDetectionsAnnotationController.DrawLater(faceDetections);
+      //_faceDetectionsAnnotationController.DrawLater(faceDetections);
     }
+    public FitData fitData;
     public Test test;
     private void OnMultiFaceLandmarksOutput(List<NormalizedLandmarkList> multiFaceLandmarks)
     {
-      _multiFaceLandmarksAnnotationController.DrawLater(multiFaceLandmarks);
+      //_multiFaceLandmarksAnnotationController.DrawLater(multiFaceLandmarks);
       if (multiFaceLandmarks != null)
       {
-        test.multiFaceLandmarks = multiFaceLandmarks;
+        if (fitData != null)
+        {
+          fitData.landmarks = multiFaceLandmarks;
+        }
+        if (test != null)
+        {
+          test.multiFaceLandmarks = multiFaceLandmarks;
+        }
         //Debug.Log(multiFaceLandmarks[0]);
-      }else
+      }
+      else
       {
-        test.multiFaceLandmarks = null;
+        if (fitData != null)
+        {
+          fitData.landmarks = null;
+        }
+        if (test != null)
+        {
+          test.multiFaceLandmarks = null;
+        }
       }
     }
 
     private void OnFaceRectsFromLandmarksOutput(List<NormalizedRect> faceRectsFromLandmarks)
     {
-      _faceRectsFromLandmarksAnnotationController.DrawLater(faceRectsFromLandmarks);
+      //_faceRectsFromLandmarksAnnotationController.DrawLater(faceRectsFromLandmarks);
     }
   }
 }

@@ -7,8 +7,8 @@
 using System.Collections;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Mediapipe.Unity.UI
 {

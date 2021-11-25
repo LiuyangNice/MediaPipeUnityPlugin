@@ -4,8 +4,8 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-using UnityEngine.UI;
 using System.Text.RegularExpressions;
+using UnityEngine.UI;
 
 public class UnicodeInlineText : Text
 {
