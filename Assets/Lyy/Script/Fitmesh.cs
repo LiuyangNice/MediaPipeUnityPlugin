@@ -10,13 +10,13 @@ using MathNet.Numerics.Optimization;
 using Mediapipe;
 using System.Collections.Generic;
 using UnityEngine;
-public class Test : MonoBehaviour
+public class Fitmesh : MonoBehaviour
 {
   public Camera camera;
   private Mesh mesh;
   //边缘
-  private readonly int[] _indexOnface = new int[] { 1092,392,422,847,2798,914,1087,555,270};
-  private readonly int[] _indexOnlandmarks = new int[] { 10,1,168,234,454,21,251,145,374 };
+  public int[] _indexOnface = new int[] { 1092,392,422,847,2798,914,1087,555,270, 452, 2618, 382, 3897, 225, 416 };
+  public int[] _indexOnlandmarks = new int[] { 10,1,168,234,454,21,251,145,374 , 61, 391, 0, 13, 14, 17 };
   //眼
   //private readonly int[] _indexOnface = new int[] { 1648,3628,1360,1621,3493,3427,3471,3402 };
   //private readonly int[] _indexOnlandmarks = new int[] { 33, 133, 159, 145, 362, 263, 386, 374 };
@@ -34,9 +34,9 @@ public class Test : MonoBehaviour
   {
     t = transform;
     mesh = GetComponent<MeshFilter>().mesh;
-    
     last = new DenseVector(new[] { (double)transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z,
       transform.position.x, transform.position.y, transform.position.z });
+    _lastInputY = new Vector2[_indexOnface.Length];
   }
   private void Update()
   {
@@ -50,21 +50,25 @@ public class Test : MonoBehaviour
   {
     v4 = new Vector4[_indexOnface.Length];
     v2 = new Vector2[_indexOnlandmarks.Length];
-    for (int i = 0; i < _indexOnface.Length; i++)
+    for (var i = 0; i < _indexOnface.Length; i++)
     {
       v4[i] = new Vector4(mesh.vertices[_indexOnface[i]].x, mesh.vertices[_indexOnface[i]].y, mesh.vertices[_indexOnface[i]].z, 1);
     }
     for (int i = 0; i < _indexOnlandmarks.Length; i++)
     {
-      v2[i] = new Vector2(multiFaceLandmarks[0].Landmark[_indexOnlandmarks[i]].X * camera.pixelWidth,
-        multiFaceLandmarks[0].Landmark[_indexOnlandmarks[i]].Y * camera.pixelHeight);
+      v2[i] =_lastInputY[i]*rate+ new Vector2(multiFaceLandmarks[0].Landmark[_indexOnlandmarks[i]].X * camera.pixelWidth,
+        multiFaceLandmarks[0].Landmark[_indexOnlandmarks[i]].Y * camera.pixelHeight)*(1-rate);
     }
+    _lastInputY = v2;
     Process();
   }
 
   public Vector2 pos;
   Transform t;
   DenseVector last;
+  Vector2[] _lastInputY;
+  [Range(0, 1)]
+  public float rate = 0.5f;
   void Process()
   {
     double Value(Vector<double> input)

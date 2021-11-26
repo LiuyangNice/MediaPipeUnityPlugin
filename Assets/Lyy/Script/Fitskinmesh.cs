@@ -1,17 +1,20 @@
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.Optimization;
+using MathNet.Numerics;
 using Mediapipe;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-public class FitData : MonoBehaviour
+public class Fitskinmesh : MonoBehaviour
 {
   public Camera target_camera;
   public List<NormalizedLandmarkList> landmarks;
-  private readonly int[] _indexOnface = new int[] { 4385, 5270, 4466, 5212, 4928, 4251, 217, 1892, 389, 3899, 225, 523 };
-  private readonly int[] _indexOnlandmarks = new int[] { 10, 152, 234, 454, 1, 168, 61, 291, 0, 13, 14, 17 };
+  private readonly int[] _indexOnface = new int[] { 4385, 5266, 4466, 5210, 880, 4251, 217, 1892, 389, 3899, 225, 523,
+        1648, 3628, 12, 1621, 3493, 3427, 3471, 2299 };
+  private readonly int[] _indexOnlandmarks = new int[] { 10, 152, 234, 454, 1, 168, 61, 291, 0, 13, 14, 17,
+        33, 133, 159, 145, 362, 263, 386, 374 };
   /// <summary>
   /// 边缘 10 152 234 454 21 172 397 1 168
   /// </summary>
@@ -36,6 +39,8 @@ public class FitData : MonoBehaviour
   void Start()
 
   {
+   
+    
     t = transform;
     skinned = GetComponent<SkinnedMeshRenderer>();
     m = new Mesh();
@@ -54,6 +59,7 @@ public class FitData : MonoBehaviour
     }
     skinned.BakeMesh(m);
     faceVerts = m.vertices;
+    _lastInputY = new Vector2[_indexOnface.Length];
   }
 
 
@@ -79,7 +85,10 @@ public class FitData : MonoBehaviour
   DenseVector Guess;
   Vector4[] inputX;
   Vector2[] inputY;
+  Vector2[] _lastInputY;
   Vector3[] faceVerts;
+  [Range(0,1)]
+  public float rate =0.5f;
   private void InstXY()
   {
     skinned.BakeMesh(m);
@@ -93,11 +102,14 @@ public class FitData : MonoBehaviour
       if (landmarks!=null)
       {
         var selectY = landmarks[0].Landmark[_indexOnlandmarks[i]];
-        inputY[i] = new Vector2(selectY.X * target_camera.pixelWidth, selectY.Y * target_camera.pixelHeight);
+        inputY[i] = _lastInputY[i]*rate+  new Vector2(selectY.X * target_camera.pixelWidth, selectY.Y * target_camera.pixelHeight)*(1-rate);
       }
 
     }
+    _lastInputY = inputY;
   }
+  DenseVector downGuess = new DenseVector(new double[] {0,0,0,-100,-100,-100,0 });
+  DenseVector upGuess = new DenseVector(new double[] {360,360,360,100,100,100,100 });
 
   private void Process()
   {
@@ -110,9 +122,8 @@ public class FitData : MonoBehaviour
       return GetValue(translate, rotate, inputX, inputY, input[6]);
     }
     var obj = ObjectiveFunction.Value(Value);
-    var solver = new NelderMeadSimplex(convergenceTolerance: 0.0000000001, maximumIterations: 10000000);
+    var solver = new NelderMeadSimplex(convergenceTolerance: 1E-08, maximumIterations: 10000000);
     var initialGuess = Guess;
-
     var result = solver.FindMinimum(obj, initialGuess);
     Guess = new DenseVector(new[] { result.MinimizingPoint[0], result.MinimizingPoint[1], result.MinimizingPoint[2],
             result.MinimizingPoint[3], result.MinimizingPoint[4], result.MinimizingPoint[5],Mathf.Clamp((float)result.MinimizingPoint[6],0,100) });
