@@ -143,8 +143,8 @@ namespace Mediapipe.Unity.FaceMesh
     {
       //_faceDetectionsAnnotationController.DrawLater(faceDetections);
     }
-    public Fitskinmesh fitData;
-    public Fitmesh test;
+    public FitData fitData;
+    public Test test;
     private void OnMultiFaceLandmarksOutput(List<NormalizedLandmarkList> multiFaceLandmarks)
     {
       //_multiFaceLandmarksAnnotationController.DrawLater(multiFaceLandmarks);
